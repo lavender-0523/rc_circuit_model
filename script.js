@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const sliderR = document.getElementById('slider-r');
     const sliderC = document.getElementById('slider-c');
     const sliderV = document.getElementById('slider-v');
+    const sliderT = document.getElementById('slider-t');
 
     const displayR = document.getElementById('display-r');
     const displayC = document.getElementById('display-c');
     const displayV = document.getElementById('display-v');
+    const displayT = document.getElementById('display-t');
 
     const valR = document.getElementById('val-r');
     const valC = document.getElementById('val-c');
@@ -44,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: false, // Turn off global load animations
             interaction: {
                 mode: 'index',
                 intersect: false,
@@ -81,11 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const R = parseFloat(sliderR.value);
         const C_uF = parseFloat(sliderC.value);
         const Vs = parseFloat(sliderV.value);
+        const t_max = parseFloat(sliderT.value);
         
         // Update display text inside sliders
         displayR.textContent = R;
         displayC.textContent = C_uF;
         displayV.textContent = Vs.toFixed(1);
+        displayT.textContent = t_max.toFixed(1);
 
         // Update metrics cards
         valR.textContent = R + " \u03A9";
@@ -99,8 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const tau = R * C;
         valTau.textContent = tau.toFixed(4) + " s";
 
-        // Simulation parameters
-        const t_max = 5 * tau;
         const num_points = 200;
         const dt = t_max / num_points;
 
@@ -137,13 +140,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Adjust y-axis max to give a little headroom above Vs
         rcChart.options.scales.y.suggestedMax = Vs * 1.1;
         
-        rcChart.update();
+        // Pass 'none' to disable Chart.js default line-drawing animations
+        // This solves the 'graph rubber-banding/extending' visual bug completely!
+        rcChart.update('none');
     }
 
     // Attach event listeners to sliders
     sliderR.addEventListener('input', updateModel);
     sliderC.addEventListener('input', updateModel);
     sliderV.addEventListener('input', updateModel);
+    sliderT.addEventListener('input', updateModel);
 
     // Initial render
     updateModel();
