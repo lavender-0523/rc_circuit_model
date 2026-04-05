@@ -123,13 +123,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let Vc_analytical = Vs * (1 - Math.exp(-t / tau));
             analytical_array.push(Vc_analytical);
 
-            // 2. Numerical ODE Solver (Euler Method)
-            // dVc/dt = (Vs - Vc) / (R * C)
+            // 2. Numerical ODE Solver (Backward Euler Method)
+            // Explicit Euler explodes (goes to infinity) if dt > 2*tau. 
+            // Since our sliders allow extreme ratios, Backward Euler provides unconditional stability!
             numerical_array.push(Vc_numerical);
             
-            // Calculate next step
-            let dVc_dt = (Vs - Vc_numerical) / tau;
-            Vc_numerical = Vc_numerical + (dVc_dt * dt);
+            // V_{n+1} = (V_n + Vs * (dt/tau)) / (1 + (dt/tau))
+            let dt_tau = dt / tau;
+            Vc_numerical = (Vc_numerical + Vs * dt_tau) / (1 + dt_tau);
         }
 
         // Update Chart
