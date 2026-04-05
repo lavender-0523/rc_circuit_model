@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart RC Circuit Dashboard</title>
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- MathJax for rendering equations -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>⚡ Smart RC Circuit Dashboard</h1>
+            <p class="subtitle">Dynamic computation and visual analysis of first-order differential equations.</p>
+        </header>
+
+        <div class="metrics-row">
+            <div class="metric-card">
+                <div class="metric-label">Resistance (R)</div>
+                <div class="metric-value" id="val-r">1000 Ω</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Capacitance (C)</div>
+                <div class="metric-value" id="val-c">100 µF</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Source Voltage (Vs)</div>
+                <div class="metric-value" id="val-v">5.0 V</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Time Constant (&tau;)</div>
+                <div class="metric-value highlight" id="val-tau">0.1000 s</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <aside class="sidebar glass">
+                <h2>🎛️ Circuit Parameters</h2>
+                <p class="helper-text">Adjust properties to see real-time ODE shifts.</p>
+                
+                <div class="control-group">
+                    <label for="slider-r">Resistance: <span><span id="display-r">1000</span> &Omega;</span></label>
+                    <input type="range" id="slider-r" min="10" max="10000" step="10" value="1000">
+                </div>
+
+                <div class="control-group">
+                    <label for="slider-c">Capacitance: <span><span id="display-c">100</span> &mu;F</span></label>
+                    <input type="range" id="slider-c" min="1" max="1000" step="1" value="100">
+                </div>
+
+                <div class="control-group">
+                    <label for="slider-v">Source Voltage: <span><span id="display-v">5.0</span> V</span></label>
+                    <input type="range" id="slider-v" min="1.0" max="24.0" step="0.5" value="5.0">
+                </div>
+
+                <div class="mathematics-section mt-2">
+                    <h3>🧮 The Mathematics</h3>
+                    <p>We model the charging RC circuit using the standard first-order ODE:</p>
+                    <div class="math-block">
+                        $$ R \frac{dq}{dt} + \frac{q}{C} = V(t) $$
+                    </div>
+                    <p>Given $q = C \cdot V_c$, substituting gives:</p>
+                    <div class="math-block">
+                        $$ RC \frac{dV_c}{dt} + V_c = V_s $$
+                    </div>
+                    <p>The <b>analytical solution</b> evaluates to:</p>
+                    <div class="math-block">
+                        $$ V_c(t) = V_s \left(1 - e^{-\frac{t}{RC}}\right) $$
+                    </div>
+                </div>
+            </aside>
+
+            <main class="chart-section glass">
+                <h3>📈 Capacitor Voltage Over Time</h3>
+                <div class="chart-container">
+                    <canvas id="rcChart"></canvas>
+                </div>
+                <div class="insight-box mt-2">
+                    <b>✨ AI & Compute Insight:</b> We aren't just plotting a standard mathematical equation! This JavaScript App calculates the green curve dynamically by solving the differential equation numerically step-by-step using the Euler Method. When the physical math equation and the computational ODE engine yield the exact same overlapping curves, it proves the validity of computational analysis!
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
